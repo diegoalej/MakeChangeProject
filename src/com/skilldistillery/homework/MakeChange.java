@@ -1,102 +1,117 @@
 package com.skilldistillery.homework;
-
 import java.util.Scanner;
-
+/**
+ * Java program to calculate and output exact currency change  
+ * Program takes input for item price and cash tendered and 
+ * outputs the exact amount of change on the screen. 
+ * @author  Diego Hoyos  
+ */
 public class MakeChange {
-	 
+	/**
+	 * Main method initiates Scanner and makes use of the getTotalChange() method to get a 
+	 * balance and getChange() method to test for errors and calculate and output exact change
+	 */
 	public static void main(String[] args) {
-		Scanner kb = new Scanner(System.in);		
-		//Uncomment next two lines for testing on infinite loop as well as lines 46-49
-		boolean debug = true;
-		do {	//used for testing	
-		
-		// * User Story #1
-		//   The user is prompted asking for the price of the item.
-		System.out.print("Enter item price: " );
+// Uncomment lines 22 and 25 to run on infinite loop
+			Scanner kb = new Scanner(System.in);		
+//		while(true) {
+			double totalChange = getTotalChange(kb);
+			getChange(totalChange);
+//		if(totalChange < -1000)break;}
+			kb.close();			
+	}// End Main	
+	/**
+	 * Takes user iput and returns the difference of the item price and amount tendered
+	 * @param Scanner object passed in from main
+	 * @return double with total amount of change or underpayment
+	 */
+	private static double getTotalChange(Scanner kb) {
+		System.out.print("Enter item price: ");		
 		double priceOfItem = kb.nextDouble();
-		
-		// * User Story #2
-		//   The user is then prompted asking how much money was tendered by the customer.
-		System.out.print("Enter amount tendered: " );
+		System.out.print("Enter amount tendered: ");
 		double amountTendered = kb.nextDouble();
-		
-		double totalChange =  amountTendered - priceOfItem;
-		
-		// * User Story #3
-		//   Display an appropriate message if the customer provided too little money or the exact amount.		 
-		if (totalChange < 0) { //   Conditional using the change balance above testing for underpayment 
-			System.out.println("Not enough, you are $"  + (roundTwoDecimals(totalChange) * -1) + " short for purchasing this item.");
-		}
-		else if (totalChange == 0) { //   Conditional using the change balance above testing for exact amount
+		double totalChange = amountTendered - priceOfItem;
+		return totalChange;
+	}
+	/**
+	 * Method includes tests cases for exact payment, underpayment, or calls 
+	 * getChangeString() to figure out exact change and output messages accordingly 
+	 * @param totalChange is the balance of item price minus payment amount
+	 * @return nothing
+	 */
+	private static void getChange(double totalChange) {
+		if (totalChange < 0) { // Conditional testing for underpayment
+			System.out.println("Not enough, you are $" + (roundTwoDecimals(totalChange) * -1)
+					+ " short for purchasing this item.");
+		} else if (totalChange == 0) { // Conditional testing for exact amount
 			System.out.println("Exact payment, thanks!");
+		} else {// Else get exact change and print out result
+			String changeBreakdown = getChangeString(roundTwoDecimals(totalChange));
+			System.out.println(changeBreakdown);
 		}
-		else {
-		// * User Story #4
-		//   If the amount tendered is more than the cost of the item, 
-		//   display the number of bills and coins that should be given to the customer.
-		String changeBreakdown = getChange(roundTwoDecimals(totalChange));		
-		System.out.println(changeBreakdown);		
-		}		
-		// Uncomment next four lines for testing on infinite loop as well as lines 11 and 12
-		if (priceOfItem == 0) {
-			debug = false;
-		}		
-		}while (debug);
-		kb.close();
-	}//End Main
-	
-	//Method test different change cases from biggest to smallest to find exact change
-	private static String getChange(double changeBalance) {
+	}
+	/**
+	 * Method tests different currency denominations from biggest to smallest 
+	 * to calculate exact change and output accordingly
+	 * @param changeBalance is the total amount of change to be broken down
+	 * @return String with change breakdown
+	 */
+	private static String getChangeString(double changeBalance) {
 		String totalChangeString = "Here's your change breakdownfor $" + changeBalance + "\n";
 		int currencyNumber;
-		if(changeBalance >= 20) { //test to see if balance is more than denomination 
-			currencyNumber = (int) (changeBalance / 20); //find out the number of bills/coins needed 
-			totalChangeString += "$20: " + currencyNumber + "\n"; //concatenate the denomination and number of bills to the return string
-			changeBalance = roundTwoDecimals(changeBalance - 20 * currencyNumber); //update the change balance and continue to the cases below
+		if (changeBalance >= 20) { // test to see if balance is more than denomination
+			currencyNumber = (int) (changeBalance / 20); // find out the number of bills/coins needed
+			totalChangeString += "$20: " + currencyNumber + "\n"; // concatenate the denomination and number of bills to return string
+			changeBalance = roundTwoDecimals(changeBalance - 20 * currencyNumber); // update the change balance 
 		}
-		if(changeBalance >= 10) {
+		if (changeBalance >= 10) {
 			currencyNumber = (int) (changeBalance / 10);
 			totalChangeString += "$10: " + currencyNumber + "\n";
 			changeBalance = roundTwoDecimals(changeBalance - 10 * currencyNumber);
 		}
-		if(changeBalance >= 5) {
+		if (changeBalance >= 5) {
 			currencyNumber = (int) (changeBalance / 5);
 			totalChangeString += " $5: " + currencyNumber + "\n";
 			changeBalance = roundTwoDecimals(changeBalance - 5 * currencyNumber);
 		}
-		if(changeBalance >= 1) {
+		if (changeBalance >= 1) {
 			currencyNumber = (int) (changeBalance / 1);
 			totalChangeString += " $1: " + currencyNumber + "\n";
 			changeBalance = roundTwoDecimals(changeBalance - 1 * currencyNumber);
 		}
-		if(changeBalance >= .25) {
+		if (changeBalance >= .25) {
 			currencyNumber = (int) (changeBalance / .25);
 			totalChangeString += "¢25: " + currencyNumber + "\n";
 			changeBalance = roundTwoDecimals(changeBalance - .25 * currencyNumber);
 		}
-		if(changeBalance >= .10) {
+		if (changeBalance >= .10) {
 			currencyNumber = (int) (changeBalance / .10);
 			totalChangeString += "¢10: " + currencyNumber + "\n";
 			changeBalance = roundTwoDecimals(changeBalance - .10 * currencyNumber);
 		}
-		if(changeBalance >= .05) {
+		if (changeBalance >= .05) {
 			currencyNumber = (int) (changeBalance / .05);
 			totalChangeString += " ¢5: " + currencyNumber + "\n";
 			changeBalance = roundTwoDecimals(changeBalance - .05 * currencyNumber);
 		}
-		if(changeBalance >= .01) {
+		if (changeBalance >= .01) {
 			currencyNumber = (int) (changeBalance / .01);
 			totalChangeString += " ¢1: " + currencyNumber + "\n";
 			changeBalance = roundTwoDecimals(changeBalance - .01 * currencyNumber);
 		}
+//		System.out.println("Change balance at the end of method getChangeString: " + changeBalance);
 		return totalChangeString;
 	}
-	
-	//Method uses * / by 100 to move decimal places and Math.round() to do the actual rounding
+	/**
+	 * Method uses multiplication and division as well as Math.round()
+	 * to round and limit decimal places to two 
+	 * @param roundedNum is the running change balance that needs to be rounded
+	 * @return Double with only two decimal places
+	 */
 	public static double roundTwoDecimals(double roundedNum) {
 		roundedNum = Math.round(roundedNum * 100);
 		roundedNum /= 100;
 		return roundedNum;
 	}
-		
+
 }
