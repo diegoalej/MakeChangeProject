@@ -12,7 +12,7 @@ public class MakeChange {
 	 * balance and getChange() method to test for errors and calculate and output exact change
 	 */
 	public static void main(String[] args) {
-// Uncomment lines 22 and 25 to run on infinite loop
+// Uncomment lines 17 and 20 to run on infinite loop
 			Scanner kb = new Scanner(System.in);		
 //		while(true) {
 			double totalChange = getTotalChange(kb);
