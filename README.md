@@ -28,5 +28,6 @@ This is a cash register application that uses methods and conditional logic to c
 * I learned conditional logic
 * I learned rounding
 * I learned commenting
+* I learned variable scope and casting
 
 
